@@ -2,38 +2,68 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style/style.css">
+  <title>Document</title>
 </head>
 
 <body>
-    <div class="container">
-        <div class="table-notes">
-            <div class="table-header">
-                <span class="header-name">Name</span>
-                <span class="header-name">Created</span>
-                <span class="header-name">Category</span>
-                <span class="header-name">Content</span>
-                <span class="header-name">Dated</span>
-                <div class="header-buttons">
-                    <button id="show-archive" class="button"><i class="fas fa-archive" title="archive"></i></button>
-                    <button class="button"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
+  <div class="container">
+    <div class="table-notes">
+      <div class="table-header">
+        <span class="header-name">Name</span>
+        <span class="header-name">Created</span>
+        <span class="header-name">Category</span>
+        <span class="header-name">Content</span>
+        <span class="header-name">Dated</span>
+        <div class="header-buttons">
+          <button id="show-archive" class="button"><i class="fas fa-archive" title="archive"></i></button>
+          <button class="button"><i class="fas fa-trash"></i></button>
         </div>
-        <button class="button-create-note">Create Note</button>
-        <div class="table-summary">
-            <div class="table-header">
-                <span class="header-name">Note Category</span>
-                <span class="header-name">Active</span>
-                <span class="header-name">Archived</span>
-            </div>
-        </div>
+      </div>
     </div>
-    <script src="js/app.js"></script>
-    <script src="https://kit.fontawesome.com/17f4f5e6ca.js" crossorigin="anonymous"></script>
+    <button id="openForm" class="button-create-note">Create Note</button>
+    <div class="table-summary">
+      <div class="table-header">
+        <span class="header-name">Note Category</span>
+        <span class="header-name">Active</span>
+        <span class="header-name">Archived</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="myModal" class="modal">
+    <div class="container">
+      <form id="formNote" action="/add" class="modal-content">
+      <span class="close">&times;</span>
+        <label for="name">Name</label>
+        <input type="text" name="name" minlength="4" required>
+        <label for="category">Category</label>
+        <select name="category" required>
+          <option value="Task">Task</option>
+          <option value="Random Thought">Random Thought</option>
+          <option value="Idea">Idea</option>
+          <option value="Quote">Quote</option>
+        </select>
+        <label for="content">Contend</label>
+        <textarea name="content" id="" cols="30" rows="4" minlength="4" required></textarea>
+        <fieldset>
+          <legend>Dated</legend>
+          <span>Start</span>
+          <input class="startDate" type="date" name="startDate" id="">
+          <span>End</span>
+          <input type="date" name="endDate" id="">
+        </fieldset>
+        <button id="submitForm" class="button-create-note" type="submit">Submit</button>
+      </form>
+    </div>
+
+  </div>
+  <script src="js/app.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="https://kit.fontawesome.com/17f4f5e6ca.js" crossorigin="anonymous"></script>
 </body>
+
 </html>

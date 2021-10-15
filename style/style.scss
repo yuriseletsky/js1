@@ -25,6 +25,15 @@
     display: flex;
     background: #999999;
     color: #fff;
+
+    .button {
+        cursor: pointer;
+
+        &:hover {
+            font-size: 24px;
+            transition: font-size 400ms;
+        }
+    }
 }
 
 .table-notes,
@@ -50,7 +59,7 @@
         border-radius: 5px;
 
         .header-name,
-        .header-buttons {
+        .header-buttons{
             padding: 5px;
             font-size: 18px;
             font-family: Arial, Helvetica, sans-serif;
@@ -78,7 +87,8 @@
         height: 45px;
         margin-top: 5px;
         border-radius: 5px;
-        &.archived{
+
+        &.archived {
             display: none;
         }
 
@@ -91,9 +101,11 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            &:first-of-type{
+
+            &:first-of-type {
                 text-align: left;
-                i{
+
+                i {
                     font-size: 20px;
                     background-color: #505050;
                     color: #fff;
@@ -123,4 +135,85 @@
         }
     }
 
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content */
+.modal-content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0 10px 10px 10px;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+
+    span,
+    label,
+    input,
+    select,
+    fieldset,
+    textarea{
+        padding: 5px;
+        font-size: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+        resize: none;
+    }
+}
+
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+.close {
+    display: flex;
+    color: #6e6e6e;
+    font-size: 28px;
+    font-weight: bold;
+    flex-direction: row-reverse;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }

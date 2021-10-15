@@ -1,119 +1,41 @@
-const tableElement = document.querySelector(".table-notes-items")
-const tableNotesParrent = document.querySelector(".table-notes")
-const tableSummaryParrent = document.querySelector(".table-summary")
-const unArchiveButton = document.querySelector("#show-archive")
+(async () => {
+    const moduleHtml = await import('./html-methods.js')
+    const HtmlMethods = moduleHtml.default
+    const moduleEvents = await import('./events.js')
+    const Events = moduleEvents.default
+    const moduleRender = await import('./render.js')
+    const Render = moduleRender.default
 
-function getCategoryIcon(category) {
-    switch (category) {
-        case 'Task':
-            return '<i class="fas fa-shopping-cart"></i>'
-        case 'Random Thought':
-            return '<i class="fas fa-head-side-virus"></i>'
-        case 'Idea':
-            return '<i class="fas fa-lightbulb"></i>'
-        case 'Quote':
-            return '<i class="fas fa-quote-right"></i>'
-        default:
-            return '<i class="fas fa-shopping-cart"></i>'
-    }
-}
+    fetch('./js/data.json')
+        .then(response => response.json())
+        .then(data => {
+            Render.renderNotes(data, ".table-notes", HtmlMethods)
+            return data.notes
+        })
+        .then(notes => {
+            Render.renderSummary(notes, ".table-summary", HtmlMethods)
+        })
+        .then(() => {
+            let updateSummaryCallback = Events.getCallbackUpdate(".table-notes .table-notes-item",
+                ".table-summary",
+                ".table-notes-item",
+                HtmlMethods,
+                Render
+            )
+            Events.onUnArchive("#show-archive", Events.unArchive)
+            Events.onDelete('.table-notes .button.delete', [Events.deleteNote, updateSummaryCallback])
+            Events.onArchive('.table-notes .button.archive', [Events.archiveNote, updateSummaryCallback])
+            Events.onEdit('.table-notes .button.edit', Events.archiveNote)
+            Events.onCreate("#submitForm", (event) => {
+                let result = Events.create(event, "#formNote", ".table-notes", HtmlMethods, Render)
+                console.log('result',result);
+                if(result){
+                    updateSummaryCallback()
+                }
+            })
 
-function renderSummaryTable() {
-
-}
-
-function getSummaryInfo() {
-
-}
-
-function createNoteElement(data) {
-    let element = document.createElement('div');
-    let icon = getCategoryIcon(data.category);
-    element.className = `table-notes-item ${data.active === false && 'archived'}`;
-    element.innerHTML = `
-    <span class="note-info">
-        ${icon}
-        ${data.name}
-    </span>
-    <span class="note-info">
-        ${data.created}
-    </span>
-    <span class="note-info">
-        ${data.category}
-    </span>
-    <span class="note-info">
-        ${data.content}
-    </span>
-    <span class="note-info">
-        ${data.dates}
-    </span>
-    <div class="note-buttons">
-        <button class="button" title="edit">
-            <i class="fas fa-pencil-alt"></i>
-        </button>
-        <button class="button" title="archive">
-            <i class="fas fa-archive"></i>
-        </button>
-        <button class="button" title="delete">
-            <i class="fas fa-trash"></i>
-        </button>
-    </div>
-`
-    return element;
-}
-
-function createSummaryElement(name, data) {
-    let element = document.createElement('div');
-    let icon = getCategoryIcon(name);
-    element.className = 'table-notes-item';
-    element.innerHTML = `
-        <span class="note-info">
-            ${icon}
-            ${name}
-        </span>
-        <span class="note-info">
-            ${data.active}
-        </span>
-        <span class="note-info">
-            ${data.archived}
-        </span>
-`
-    return element;
-}
-
-fetch('./js/data.json')
-    .then(response => response.json())
-    .then(data => {
-        data.notes.forEach(element => {
-            let noteElement = createNoteElement(element)
-            tableNotesParrent.append(noteElement)
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
-        return data.notes
-    })
-    .then(notes => {
-        let summary = new Map()
-        notes.forEach(note => {
-            let active = note.active ? 1 : 0;
-            let archived = note.active ? 0 : 1;
-            if (summary.has(note.category)) {
-                let current = summary.get(note.category)
-                summary.set(note.category, {
-                    'active': current.active + active,
-                    'archived': current.archived + archived
-                })
-            } else {
-                summary.set(note.category, {
-                    'active': active,
-                    'archived': archived
-                })
-            }
-        });
-        summary.forEach((value, noteName) => {
-            let summaryElement = createSummaryElement(noteName, value)
-            tableSummaryParrent.append(summaryElement)
-        });
-        // console.log(summary);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+})()
